@@ -1,0 +1,74 @@
+name: Check
+
+concurrency:
+  # Run only for most recent commit in PRs but for all tags and commits on main
+  # Ref: https://docs.github.com/en/actions/using-jobs/using-concurrency
+  group: ${{ github.workflow }}-${{ github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches:
+      - '*'
+
+env:
+  # Specify this here because these tests rely on ktf to run kind for cluster creation.
+  KIND_VERSION: v0.23.0
+
+jobs:
+  lint:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+  integration-test:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    env:
+      GATEWAY_API_VERSION: v1.0.0
+    strategy:
+      matrix:
+        kubernetes-version:
+          # renovate: datasource=github-tags depName=kubernetes/kubernetes@only-patch
+          - "1.26.15"
+          # renovate: datasource=github-tags depName=kubernetes/kubernetes@only-patch
+          - "1.27.13"
+          # renovate: datasource=github-tags depName=kubernetes/kubernetes@only-patch
+          - "1.28.9"
+          # renovate: datasource=github-tags depName=kubernetes/kubernetes@only-patch
+          - "1.29.4"
+          # renovate: datasource=github-tags depName=kubernetes/kubernetes@only-patch
+          - "1.30.0"
+          # renovate: datasource=github-tags depName=kubernetes/kubernetes@only-patch
+          - "1.31.0"
+        chart-name:
+          - kong
+          - ingress
+          - gateway-operator
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: setup helm
+        uses: azure/setup-helm@v4.2.0
+
+      # - name: setup testing environment (kind-cluster)
+      #   env:
+      #     KUBERNETES_VERSION: ${{ matrix.kubernetes-version }}
+      #     CHART_NAME: ${{ matrix.chart-name }}
+      #   run: ./scripts/test-env.sh
+
+      # - name: run integration tests (integration)
+      #   env:
+      #     CHART_NAME: ${{ matrix.chart-name }}
+      #   run: ./scripts/test-run.sh
+
+      # - name: run upgrade integration tests (integration-upgrade)
+      #   env:
+      #     CHART_NAME: ${{ matrix.chart-name }}
+      #   run: ./scripts/test-upgrade.sh
+
+      # - name: cleanup integration tests (cleanup)
+      #   run: ./scripts/test-env.sh cleanup
