@@ -42,7 +42,7 @@
       "matchUpdateTypes": [
         "patch"
       ],
-      "groupName": "kubernetes",
+      "groupName": "kubernetes/kubernetes",
       "matchDepNames": [
         "kubernetes/kubernetes"
       ]
