@@ -13,7 +13,7 @@ on:
 
 env:
   # Specify this here because these tests rely on ktf to run kind for cluster creation.
-  KIND_VERSION: v0.23.0
+  KIND_VERSION: "0.23.0"
 
 jobs:
   lint:
@@ -54,11 +54,11 @@ jobs:
       - name: setup helm
         uses: azure/setup-helm@v4.2.0
 
-      # - name: setup testing environment (kind-cluster)
-      #   env:
-      #     KUBERNETES_VERSION: ${{ matrix.kubernetes-version }}
-      #     CHART_NAME: ${{ matrix.chart-name }}
-      #   run: ./scripts/test-env.sh
+      - name: setup testing environment (kind-cluster)
+        env:
+          KUBERNETES_VERSION: ${{ matrix.kubernetes-version }}
+          CHART_NAME: ${{ matrix.chart-name }}
+        run: ./scripts/test-env.sh
 
       # - name: run integration tests (integration)
       #   env:
