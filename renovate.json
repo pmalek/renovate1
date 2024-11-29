@@ -29,6 +29,7 @@
     {
       "description": "Only update patch versions for selected dependencies.",
       "matchUpdateTypes": [
+        "major",
         "minor"
       ],
       "enabled": false,
