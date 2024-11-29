@@ -98,8 +98,3 @@ else
 fi
 
 kubectl kustomize "github.com/kubernetes-sigs/gateway-api/config/crd/experimental?ref=${GATEWAY_API_VERSION}" | kubectl apply -f -
-
-echo "INFO: Updating helm dependencies"
-for i in charts/*; do
-  helm dependency update "$i"
-done
