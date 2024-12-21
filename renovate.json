@@ -4,7 +4,6 @@
     "config:recommended"
   ],
   "enabledManagers": [
-    "custom.regex"
   ],
   "automerge": false,
   "separateMinorPatch": true,
